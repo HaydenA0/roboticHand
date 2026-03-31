@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="bcr_arm">
+
+    <!-- Configuration Arguments -->
+    <xacro:arg name="use_gazebo" default="true"/>
+    <xacro:arg name="ros2_controllers_path" 
+               default="bcr_arm_gazebo/config/ros2_controllers.yaml"/>
+
+    <!-- 1. Fix the robot to the world (the ground) -->
+    <link name="world"/>
+    <joint name="world_to_base" type="fixed">
+        <parent link="world"/>
+        <child link="base_link"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
+
+    <!-- 2. Include the mechanical description (Links and Joints) -->
+    <xacro:include filename="$(find bcr_arm_description)/urdf/mech/bcr_arm_mech.urdf.xacro"/>
+    <xacro:bcr_arm_kinematics/>
+
+    <!-- 3. ROS 2 Control and Gazebo Simulation Logic -->
+    <xacro:if value="$(arg use_gazebo)">
+        
+        <!-- Load the Gazebo Plugin -->
+        <xacro:include filename="$(find bcr_arm_description)/urdf/control/gazebo_sim_ros2_control.urdf.xacro"/>
+        <xacro:load_gazebo_sim_ros2_control_plugin 
+            robot_name="bcr_arm" 
+            ros2_controllers_path="$(find bcr_arm_gazebo)/config/ros2_controllers.yaml" 
+            use_gazebo="$(arg use_gazebo)"/>
+            
+        <!-- Load the Control Interfaces -->
+        <xacro:include filename="$(find bcr_arm_description)/urdf/control/ros2_control.urdf.xacro"/>
+        <xacro:ros2_control_interfaces/>
+        
+    </xacro:if>
+
+</robot>

@@ -1,0 +1,130 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+
+    <!-- Proprietes geometriques (from Table 1) -->
+    <xacro:property name="l1_len" value="0.200" />
+    <xacro:property name="l2_offset" value="0.065" />
+    <xacro:property name="l3_len" value="0.410" />
+    <xacro:property name="l4_offset" value="-0.065" />
+    <xacro:property name="l5_len" value="0.310" />
+    <xacro:property name="l6_offset" value="0.060" />
+    <xacro:property name="l7_len" value="0.105" />
+
+    <xacro:macro name="bcr_arm_kinematics">
+
+        <!-- BASE LINK -->
+        <link name="base_link">
+            <visual>
+                <geometry>
+                    <mesh filename="package://bcr_arm_description/meshes/base_joint.dae" scale="0.001 0.001 0.001"/>
+                </geometry>
+            </visual>
+            <collision>
+                <geometry><mesh filename="package://bcr_arm_description/meshes/base_joint.dae" scale="0.001 0.001 0.001"/></geometry>
+            </collision>
+            <inertial>
+                <mass value="1.0"/><inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+            </inertial>
+        </link>
+
+        <!-- JOINT 1 (Z axis) -->
+        <joint name="joint1" type="revolute">
+            <parent link="base_link"/>
+            <child link="link1"/>
+            <origin xyz="0 0 0.025" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+            <limit lower="-6.28" upper="6.28" effort="100" velocity="2"/>
+        </joint>
+
+        <link name="link1">
+            <visual><geometry><mesh filename="package://bcr_arm_description/meshes/link1.dae" scale="0.001 0.001 0.001"/></geometry></visual>
+            <collision><geometry><mesh filename="package://bcr_arm_description/meshes/link1.dae" scale="0.001 0.001 0.001"/></geometry></collision>
+            <inertial><mass value="0.5"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.005"/></inertial>
+        </link>
+
+        <!-- JOINT 2 (X axis) -> Uses L1 height -->
+        <joint name="joint2" type="revolute">
+            <parent link="link1"/>
+            <child link="link2"/>
+            <origin xyz="0 0 ${l1_len}" rpy="0 0 0"/>
+            <axis xyz="1 0 0"/>
+            <limit lower="-6.28" upper="6.28" effort="100" velocity="2"/>
+        </joint>
+
+        <link name="link2">
+            <visual><geometry><mesh filename="package://bcr_arm_description/meshes/link2.dae" scale="0.001 0.001 0.001"/></geometry></visual>
+            <inertial><mass value="0.5"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.005"/></inertial>
+        </link>
+
+        <!-- JOINT 3 (Z axis) -> Uses L2 offset -->
+        <joint name="joint3" type="revolute">
+            <parent link="link2"/>
+            <child link="link3"/>
+            <origin xyz="${l2_offset} 0 0" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+            <limit lower="-6.28" upper="6.28" effort="100" velocity="2"/>
+        </joint>
+
+        <link name="link3">
+            <visual><geometry><mesh filename="package://bcr_arm_description/meshes/link3.dae" scale="0.001 0.001 0.001"/></geometry></visual>
+            <inertial><mass value="0.5"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.005"/></inertial>
+        </link>
+
+        <!-- JOINT 4 (X axis) -> Uses L3 length -->
+        <joint name="joint4" type="revolute">
+            <parent link="link3"/>
+            <child link="link4"/>
+            <origin xyz="0 0 ${l3_len}" rpy="0 0 0"/>
+            <axis xyz="1 0 0"/>
+            <limit lower="-6.28" upper="6.28" effort="100" velocity="2"/>
+        </joint>
+
+        <link name="link4">
+            <visual><geometry><mesh filename="package://bcr_arm_description/meshes/link4.dae" scale="0.001 0.001 0.001"/></geometry></visual>
+            <inertial><mass value="0.5"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.005"/></inertial>
+        </link>
+
+        <!-- JOINT 5 (Z axis) -> Uses L4 offset -->
+        <joint name="joint5" type="revolute">
+            <parent link="link4"/>
+            <child link="link5"/>
+            <origin xyz="${l4_offset} 0 0" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+            <limit lower="-6.28" upper="6.28" effort="100" velocity="2"/>
+        </joint>
+
+        <link name="link5">
+            <visual><geometry><mesh filename="package://bcr_arm_description/meshes/link5.dae" scale="0.001 0.001 0.001"/></geometry></visual>
+            <inertial><mass value="0.5"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.005"/></inertial>
+        </link>
+
+        <!-- JOINT 6 (X axis) -> Uses L5 length -->
+        <joint name="joint6" type="revolute">
+            <parent link="link5"/>
+            <child link="link6"/>
+            <origin xyz="0 0 ${l5_len}" rpy="0 0 0"/>
+            <axis xyz="1 0 0"/>
+            <limit lower="-6.28" upper="6.28" effort="100" velocity="2"/>
+        </joint>
+
+        <link name="link6">
+            <visual><geometry><mesh filename="package://bcr_arm_description/meshes/link6.dae" scale="0.001 0.001 0.001"/></geometry></visual>
+            <inertial><mass value="0.5"/><inertia ixx="0.005" ixy="0" ixz="0" iyy="0.005" iyz="0" izz="0.005"/></inertial>
+        </link>
+
+        <!-- JOINT 7 (Z axis) -> Uses L6 + L7 total -->
+        <joint name="joint7" type="revolute">
+            <parent link="link6"/>
+            <child link="flange"/>
+            <origin xyz="${l6_offset} 0 ${l7_len}" rpy="0 0 0"/>
+            <axis xyz="0 0 1"/>
+            <limit lower="-6.28" upper="6.28" effort="100" velocity="2"/>
+        </joint>
+
+        <link name="flange">
+            <visual><geometry><sphere radius="0.02"/></geometry></visual> <!-- Placeholder for flange -->
+            <inertial><mass value="0.1"/><inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001"/></inertial>
+        </link>
+
+    </xacro:macro>
+</robot>
